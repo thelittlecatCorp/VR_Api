@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.dbas.psychologyvrapi.mapper.PhenoMapper">
+
+    <insert id="addPhenoData" parameterType="map">
+        INSERT INTO VR_SEQUENCE_DATA (
+            user_id
+            , level_code
+            , area_code
+            , task_code
+            , object_code
+            , gcurrent_start_time
+            , gcurrent_end_time
+            , gcount_start_time
+            , gcount_end_time
+            , gcount_lead_time
+            , vcurrent_start_time
+            , vcurrent_end_time
+            , vcount_start_time
+            , vcount_end_time
+            , move
+        )
+        VALUES (
+            #{userId}
+            , #{levelCode}
+            , #{areaCode}
+            , #{taskCode}
+            , #{objectCode}
+            , #{gCurrentStartTime}
+            , #{gCurrentEndTime}
+            , #{gCountStartTime}
+            , #{gCountEndTime}
+            , #{gCountLeadTime}
+            , #{vCurrentStartTime}
+            , #{vCurrentEndTime} 
+            , #{vCountStartTime}
+            , #{vCountEndTime}
+            , #{move}
+        )
+    </insert>
+</mapper>
