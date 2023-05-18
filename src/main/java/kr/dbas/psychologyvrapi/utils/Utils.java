@@ -1,5 +1,7 @@
 package kr.dbas.psychologyvrapi.utils;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,4 +143,19 @@ public class Utils {
         return UUID.randomUUID().toString().toUpperCase().replace("-", "");
     }
 	
+	public static String getBetweenTime(String startTime, String endTime) {
+		String[] sTimes = startTime.split(":");
+		String[] eTimes = endTime.split(":");
+
+		LocalTime time1 = LocalTime.of(Integer.parseInt(sTimes[0]), Integer.parseInt(sTimes[1]), Integer.parseInt(sTimes[2]));
+		LocalTime time2 = LocalTime.of(Integer.parseInt(eTimes[0]), Integer.parseInt(eTimes[1]), Integer.parseInt(eTimes[2]));
+
+		Duration duration = Duration.between(time1, time2);
+
+		long hours = duration.toHours(); // Extract hours from the duration
+        long minutes = duration.toMinutes() % 60; // Extract minutes from the duration
+        long seconds = duration.getSeconds() % 60; // Extract seconds from the duration
+        
+		return String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
+	}
 }

@@ -2,17 +2,16 @@ package kr.dbas.psychologyvrapi.dao;
 
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ApiResponse {
-	
-	@NonNull
+
 	private ApiResponseHeader header;
-	@NonNull
 	private Map<String, Object> body;
 	
 	
