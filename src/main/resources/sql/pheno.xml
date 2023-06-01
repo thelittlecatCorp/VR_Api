@@ -22,6 +22,7 @@
             , vcount_end_time
             , vcount_lead_time
             , move
+            , create_date
         )
         VALUES (
             #{userId}
@@ -41,6 +42,7 @@
             , #{vCountEndTime}
             , #{vCountLeadTime}
             , #{move}
+            , now()
         )
 	</insert>
 
