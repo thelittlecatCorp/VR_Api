@@ -7,10 +7,12 @@
 		INSERT INTO VR_SEQUENCE_DATA (
             user_id
             , sequence
+            , check_serial_number
             , level_code
             , area_code
             , task_code
             , object_code
+            , task_round
             , gcurrent_start_time
             , gcurrent_end_time
             , gcount_start_time
@@ -27,10 +29,12 @@
         VALUES (
             #{userId}
             , #{sequence}
+            , #{checkSerialNumber}
             , #{levelCode}
             , #{areaCode}
             , #{taskCode}
             , #{objectCode}
+            , #{taskRound}
             , #{gCurrentStartTime}
             , #{gCurrentEndTime}
             , #{gCountStartTime}

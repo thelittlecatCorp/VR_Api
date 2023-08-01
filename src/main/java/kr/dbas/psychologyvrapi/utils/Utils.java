@@ -144,8 +144,10 @@ public class Utils {
     }
 	
 	public static String getBetweenTime(String startTime, String endTime) {
-		String[] sTimes = startTime.split(":");
-		String[] eTimes = endTime.split(":");
+		
+		String[] sTimes = {startTime.substring(0,2), startTime.substring(3,5), startTime.substring(6,8)};
+		String[] eTimes = {endTime.substring(0,2), endTime.substring(3,5), endTime.substring(6,8)};
+		
 
 		LocalTime time1 = LocalTime.of(Integer.parseInt(sTimes[0]), Integer.parseInt(sTimes[1]), Integer.parseInt(sTimes[2]));
 		LocalTime time2 = LocalTime.of(Integer.parseInt(eTimes[0]), Integer.parseInt(eTimes[1]), Integer.parseInt(eTimes[2]));
@@ -156,6 +158,6 @@ public class Utils {
         long minutes = duration.toMinutes() % 60; // Extract minutes from the duration
         long seconds = duration.getSeconds() % 60; // Extract seconds from the duration
         
-		return String.format("%02d", hours) + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
+		return String.format("%02d", hours) + ":" + String.format("%02d", minutes) + "." + String.format("%02d", seconds);
 	}
 }
