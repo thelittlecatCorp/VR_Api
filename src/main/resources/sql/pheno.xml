@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.dbas.psychologyvrapi.mapper.PhenoMapper">
 
-	
 	<insert id="insertPhenoData" parameterType="map">
 		INSERT INTO VR_SEQUENCE_DATA (
             user_id
@@ -50,6 +49,65 @@
         )
 	</insert>
 
+	<insert id="insertVrTaskResult" parameterType="map">
+		INSERT INTO VR_TASK_RESULT (
+            user_id
+            , check_serial_number
+            , intercom_result
+            , size
+            , color
+            , subject
+            , step1
+            , step2
+            , step3
+            , step_none
+            , position_left
+            , position_right
+            , position_none
+            , way_stand
+            , way_lie
+            , way_none
+            , none
+        )
+        VALUES (
+            #{userId}
+            , #{checkSerialNumber}
+            , #{intercomResult}
+            , #{size}
+            , #{color}
+            , #{subject}
+            , #{step1}
+            , #{step2}
+            , #{step3}
+            , #{stepNone}
+            , #{positionLeft}
+            , #{positionRight}
+            , #{positionNone}
+            , #{wayStand} 
+            , #{wayLie}
+            , #{wayNone}
+            , #{none}
+        )
+	</insert>
 	
+	<insert  id="insertVrTaskComplete" parameterType="map"> 
+		INSERT INTO VR_TASK_COMPLETE (
+            user_id
+            , check_serial_number
+            , task_code
+            , complete_yn
+            , complete_rate
+        )
+        VALUES
+		<foreach collection="completeList" item="item" separator=","> 
+		(
+            #{item.userId}
+            , #{item.checkSerialNumber} 
+            , #{item.taskCode}
+            , #{item.completeYn}
+            , #{item.completeRate}            
+        )
+		</foreach> 
+	</insert >
 
 </mapper>

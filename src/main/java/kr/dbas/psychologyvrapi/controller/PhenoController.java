@@ -16,7 +16,6 @@ import kr.dbas.psychologyvrapi.dao.ApiResponse;
 import kr.dbas.psychologyvrapi.service.PhenoService;
 
 
-
 @RequestMapping("/api/pheno")
 @RestController
 public class PhenoController extends BaseController {
@@ -39,6 +38,23 @@ public class PhenoController extends BaseController {
 		}
 		
 	}
+	
+
+	@PostMapping("/progressResult")
+	public ResponseEntity<?> addPhynoResultData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ApiResponse apiResponse = new ApiResponse(null, null);
+		
+		try {
+			Map<String, Object> map = getParameterMap(request);
+			apiResponse = phenoService.addPhenoResultData(request, map);
+			
+			return getReturn(HttpServletResponse.SC_OK, apiResponse);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return getReturn(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, null);
+		}
+		
+	}	
 	
 	
 }
