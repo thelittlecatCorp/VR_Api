@@ -1,20 +1,32 @@
 package kr.dbas.psychologyvrapi.service;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.dbas.psychologyvrapi.dao.ApiResponse;
 import kr.dbas.psychologyvrapi.mapper.PhenoMapper;
+import kr.dbas.psychologyvrapi.utils.FileInfo;
+import kr.dbas.psychologyvrapi.utils.FileUtils;
 import kr.dbas.psychologyvrapi.utils.Utils;
 
 @Service
@@ -22,6 +34,9 @@ public class PhenoService {
     
     @Resource
     PhenoMapper phenoMapper;
+    
+    @Resource
+    private FileUtils fileUtils;    
 
     public ApiResponse addPhenoData(HttpServletRequest request, Map<String, Object> param) throws Exception{
         // object를 잡고 놓은 경과시간 
@@ -105,6 +120,78 @@ public class PhenoService {
         Map<String, Object> map_result = new HashMap<>();
 		return ApiResponse.success(map_result);
     }    
-        
+       
+    /**
+     *  피노타입 각 시퀀스에서 수집된 이미지 저장 API
+     * @param param
+     * @param mFile
+     * @return
+     * @throws Exception
+     */
+    public ApiResponse uploadPhenoTypeImage(Map<String, Object> param, MultipartFile mFile) throws Exception {
 
+        Object userId = param.get("userId");
+
+        if (mFile != null) {
+            String path = File.separator + "pheno" + File.separator +userId;
+            System.out.println("path : " + path);
+            FileInfo fileInfo = fileUtils.upload(mFile, path);
+            
+            String _getPath = fileInfo.getPath();
+            String _getFileName = fileInfo.getOriginal();
+            
+            File file = new File(_getPath+"/"+_getFileName);
+            InputStream in = new FileInputStream(file);
+            
+            BufferedImage inputImage = ImageIO.read(in);
+            BufferedImage resize = resize(inputImage, 50, 50);
+            
+            FileOutputStream out = new FileOutputStream(_getPath+"/resize_"+_getFileName);
+            ImageIO.write(resize, "png", out);
+            out.flush();
+            
+	    }
+        
+        Map<String, Object> map_result = new HashMap<>();
+		return ApiResponse.success(map_result);
+    }   
+    
+    
+	    /**
+	     * image resizing
+	     * @param image
+	     * @param w
+	     * @param h
+	     * @return
+	     */
+	    public BufferedImage resize(final BufferedImage image, int w, int h) {
+	    	
+	        final int ow = image.getWidth();
+	        final int oh = image.getHeight();
+	
+	        double sw = (double) w / (double) ow;
+	        double sh = (double) h / (double) oh;
+	
+	        BufferedImage resize = new BufferedImage(w, h, image.getType());
+	
+	        AffineTransform transForm = new AffineTransform();
+	        transForm.scale(sw, sh);
+	        AffineTransformOp transformOp = new AffineTransformOp(transForm, AffineTransformOp.TYPE_BICUBIC);
+	        return transformOp.filter(image, resize);
+	    }
+       
+    
+	    /**
+	     * multipartFileToFile
+	     * @param file
+	     * @return
+	     * @throws IOException
+	     */
+	    public static File multipartFileToFile(MultipartFile file) throws IOException {	      	
+	        File convFile = new File(file.getOriginalFilename());
+	        convFile.createNewFile();
+	        return convFile;	        
+	    }
+    
+    
 }
