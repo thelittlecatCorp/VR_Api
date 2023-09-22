@@ -25,16 +25,11 @@ public class Constants {
 
 	// 0 : localhost, 1: REAL
 	public static int SYSTEM_LOCATION = 1;
-	public static String IMAGE_REAL_URL = "http://ec2-15-164-221-196.ap-northeast-2.compute.amazonaws.com:8080/api/files";
-	public static String IMAGE_LOCALHOST_URL = "http://localhost:9095/api/files";
+	public static String IMAGE_REAL_URL = "http://ec2-15-164-221-196.ap-northeast-2.compute.amazonaws.com:8080/api/images";
+	public static String IMAGE_LOCALHOST_URL = "192.168.0.102:9095/api/images";
 	
 	public static String FILE_IMAGE_PATH_DEV = "/home/ec2-user/apache-tomcat-9.0.73/webapps/images";
 	public static String FILE_IMAGE_PATH_LOCALHOST = "C:\\Users\\tlc\\Pictures\\ezwel_image";
-	
-	
-	
-	public static String DIR_CAPTURE = "capture";
-	public static String DIR_GALLERY = "gallery";
-	public static String DIR_PROFILE = "profile";
+
 		
 }

@@ -6,7 +6,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +17,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import kr.dbas.psychologyvrapi.dao.ApiResponse;
 import kr.dbas.psychologyvrapi.service.PhenoService;
+import kr.dbas.psychologyvrapi.utils.FileUtils;
+import kr.dbas.psychologyvrapi.vo.ImageVO;
 
 
 @RequestMapping("/api/pheno")
@@ -23,6 +27,9 @@ public class PhenoController extends BaseController {
 
 	@Resource
 	private PhenoService phenoService;
+	
+	@Resource 
+	private FileUtils fileUtils;		
 	
 	@PostMapping("/taskProgress")
 	public ResponseEntity<?> addPhynoData(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -76,6 +83,24 @@ public class PhenoController extends BaseController {
 			return getReturn(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, null);
 		}
 	}	
+	
+	@GetMapping("/images/**")
+	public ResponseEntity<?> readImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		byte[] imageInByte = null;
+
+        try {
+        	ImageVO vo = new ImageVO();
+        	vo.setFilePath(request.getRequestURI().replaceFirst("^/admin/api/images/", "")); 
+        	
+        	imageInByte = phenoService.getImages(vo);
+        	return ResponseEntity.ok().contentType(fileUtils.getFileMimeType(vo.getFileName())).body(new ByteArrayResource(imageInByte));
+        } catch (Exception e) {
+			
+		}
+        
+        return null;
+		
+	}		
 	
 	
 }

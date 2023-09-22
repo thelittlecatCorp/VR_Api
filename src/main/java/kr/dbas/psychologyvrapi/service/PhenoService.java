@@ -28,6 +28,7 @@ import kr.dbas.psychologyvrapi.mapper.PhenoMapper;
 import kr.dbas.psychologyvrapi.utils.FileInfo;
 import kr.dbas.psychologyvrapi.utils.FileUtils;
 import kr.dbas.psychologyvrapi.utils.Utils;
+import kr.dbas.psychologyvrapi.vo.ImageVO;
 
 @Service
 public class PhenoService {
@@ -79,6 +80,7 @@ public class PhenoService {
         map_1.put("size", (String)bookArrange_obj.get("size"));
         map_1.put("color", (String)bookArrange_obj.get("color"));
         map_1.put("double", (String)bookArrange_obj.get("double"));
+        map_1.put("subject", (String)bookArrange_obj.get("subject"));
         map_1.put("step1", (String)bookArrange_obj.get("step1"));
         map_1.put("step2", (String)bookArrange_obj.get("step2"));
         map_1.put("step3", (String)bookArrange_obj.get("step3"));
@@ -136,62 +138,21 @@ public class PhenoService {
             String path = File.separator + "pheno" + File.separator +userId;
             System.out.println("path : " + path);
             FileInfo fileInfo = fileUtils.upload(mFile, path);
-            
-            String _getPath = fileInfo.getPath();
-            String _getFileName = fileInfo.getOriginal();
-            
-            File file = new File(_getPath+"/"+_getFileName);
-            InputStream in = new FileInputStream(file);
-            
-            BufferedImage inputImage = ImageIO.read(in);
-            BufferedImage resize = resize(inputImage, 50, 50);
-            
-            FileOutputStream out = new FileOutputStream(_getPath+"/resize_"+_getFileName);
-            ImageIO.write(resize, "png", out);
-            out.flush();
-            
 	    }
         
         Map<String, Object> map_result = new HashMap<>();
 		return ApiResponse.success(map_result);
-    }   
-    
-    
-	    /**
-	     * image resizing
-	     * @param image
-	     * @param w
-	     * @param h
-	     * @return
-	     */
-	    public BufferedImage resize(final BufferedImage image, int w, int h) {
-	    	
-	        final int ow = image.getWidth();
-	        final int oh = image.getHeight();
-	
-	        double sw = (double) w / (double) ow;
-	        double sh = (double) h / (double) oh;
-	
-	        BufferedImage resize = new BufferedImage(w, h, image.getType());
-	
-	        AffineTransform transForm = new AffineTransform();
-	        transForm.scale(sw, sh);
-	        AffineTransformOp transformOp = new AffineTransformOp(transForm, AffineTransformOp.TYPE_BICUBIC);
-	        return transformOp.filter(image, resize);
-	    }
-       
-    
-	    /**
-	     * multipartFileToFile
-	     * @param file
-	     * @return
-	     * @throws IOException
-	     */
-	    public static File multipartFileToFile(MultipartFile file) throws IOException {	      	
-	        File convFile = new File(file.getOriginalFilename());
-	        convFile.createNewFile();
-	        return convFile;	        
-	    }
+    }
+
+
+    /**
+     * 이미지 조회
+     */
+    public byte[] getImages(ImageVO imageVO) throws Exception {
+
+        byte[] byteImage = fileUtils.getImages(imageVO.getFilePath());
+        return byteImage;
+    }
     
     
 }
