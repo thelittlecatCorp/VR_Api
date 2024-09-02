@@ -1,5 +1,6 @@
 package kr.dbas.psychologyvrapi.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -8,9 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -32,6 +35,7 @@ public class PhenoController extends BaseController {
 	private FileUtils fileUtils;		
 	
 	@PostMapping("/taskProgress")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<?> addPhynoData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ApiResponse apiResponse = new ApiResponse(null, null);
 		
@@ -48,7 +52,8 @@ public class PhenoController extends BaseController {
 	}
 	
 
-	@PostMapping("/progressResult")
+	@PostMapping("/progressResult")	
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<?> addPhynoResultData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ApiResponse apiResponse = new ApiResponse(null, null);
 		
@@ -57,6 +62,7 @@ public class PhenoController extends BaseController {
 			apiResponse = phenoService.addPhenoResultData(request, map);
 			
 			return getReturn(HttpServletResponse.SC_OK, apiResponse);
+			//return getReturn(HttpServletResponse.SC_OK, ApiResponse.success(map));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return getReturn(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, null);
@@ -65,6 +71,7 @@ public class PhenoController extends BaseController {
 	}	
 	
 	@PostMapping("/uploadPhenoTypeImage")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<?> uploadPhenoTypeImage(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
 		ApiResponse apiResponse = new ApiResponse(null, null);
 		
@@ -85,6 +92,7 @@ public class PhenoController extends BaseController {
 	}	
 	
 	@GetMapping("/images/**")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<?> readImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		byte[] imageInByte = null;
 
@@ -101,6 +109,5 @@ public class PhenoController extends BaseController {
         return null;
 		
 	}		
-	
 	
 }

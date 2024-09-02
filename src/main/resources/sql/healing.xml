@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.dbas.psychologyvrapi.mapper.HealingMapper">
+
+	<update id="settingStart" parameterType="HashMap">
+		UPDATE PsychologyVR.BIO_CHECK
+		SET standby_yn=4
+		WHERE vital_device_number=#{vital_divice_number} AND standby_yn IN (0,1) ;	
+	</update>
+	
+	<update id="getStart" parameterType="HashMap">
+		UPDATE PsychologyVR.BIO_CHECK
+		SET standby_yn=1
+		WHERE vital_device_number=#{vital_divice_number} AND standby_yn=0 ;	
+	</update>	
+
+	<insert id="mileSecondData" parameterType="HashMap">
+		INSERT INTO PsychologyVR.BIO_SEQ_DATA_200MS  (user_id, check_number, msg_type, gsr_val, ppg_val, created_date)	
+		VALUES (
+		(select bc.user_id  from PsychologyVR.BIO_CHECK bc where bc.vital_device_number =  #{vital_divice_number}
+		and bc.standby_yn =1 limit 1 ),
+		(select bc.check_number  from PsychologyVR.BIO_CHECK bc where bc.vital_device_number = #{vital_divice_number}
+		and bc.standby_yn =1 limit 1 ),
+		1,
+		#{gsr_val},
+		#{ppg_val},
+		now())
+	</insert>
+	
+	<insert id="secondData" parameterType="HashMap">
+		INSERT INTO PsychologyVR.BIO_SEQ_DATA_SEC  (user_id, check_number, msg_type, bpm_val, created_date)	
+		VALUES (
+		(select bc.user_id  from PsychologyVR.BIO_CHECK bc where bc.vital_device_number =  #{vital_divice_number}
+		and bc.standby_yn =1 limit 1 ),
+		(select bc.check_number  from PsychologyVR.BIO_CHECK bc where bc.vital_device_number = #{vital_divice_number}
+		and bc.standby_yn =1 limit 1 ),
+		2,
+		#{bpm_val},
+		now())
+	</insert>	
+	
+	<insert id="minuteData" parameterType="HashMap">
+		INSERT INTO PsychologyVR.BIO_SEQ_DATA_MIN  (user_id, check_number, msg_type, step_count, bpm_value, created_date)	
+		VALUES (
+		(select bc.user_id  from PsychologyVR.BIO_CHECK bc where bc.vital_device_number =  #{vital_divice_number}
+		and bc.standby_yn =1 limit 1 ),
+		(select bc.check_number  from PsychologyVR.BIO_CHECK bc where bc.vital_device_number = #{vital_divice_number}
+		and bc.standby_yn =1 limit 1 ),
+		3,
+		#{step_count},
+		#{bpm_value},
+		now())
+	</insert>
+		
+
+	
+	<update id="getEnd" parameterType="HashMap">
+		UPDATE PsychologyVR.BIO_CHECK
+		SET standby_yn=2
+		WHERE vital_device_number=#{vital_divice_number} AND standby_yn=1 ;	
+	</update>			
+	
+</mapper>
